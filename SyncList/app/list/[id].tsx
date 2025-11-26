@@ -33,6 +33,7 @@ type itemProp = {
   claimedBy: {
     _id: string;
     username: string;
+    profilePictureUrl: string;
   };
 };
 
@@ -58,7 +59,7 @@ const ListDetailScreen = () => {
   const SOCKET_URL = API_URL;
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
-  const { token, isLoading: isAuthLoading } = useAuth();
+  const { token, isLoading: isAuthLoading, logOut } = useAuth();
   const [items, setItems] = useState<ShoppingList>();
   const [isListLoading, setIsListLoading] = useState(true);
   const [isAddItemModelOpen, setIsAddItemModelOpen] = useState(false);
@@ -74,7 +75,11 @@ const ListDetailScreen = () => {
     try {
       const response = await axios.get(`${API_URL}/api/item/${id}`);
       setItems(response.data);
-    } catch (err) {
+    } catch (err) {   
+      if (axios.isAxiosError(err) && err.response?.status === 403) {
+        logOut();
+        return;
+      }
       if (axios.isAxiosError(err)) {
         alert(err.response?.data?.message || "Something went wrong");
       } else if (err instanceof Error) {
@@ -104,6 +109,11 @@ const ListDetailScreen = () => {
           setIsAddItemModelOpen(false);
         }
       } catch (err: unknown) {
+        
+        if (axios.isAxiosError(err) && err.response?.status === 403) {
+          logOut();
+          return;
+        }
         if (axios.isAxiosError(err)) {
           alert(err.response?.data?.message || "Something went wrong");
         } else if (err instanceof Error) {
@@ -126,6 +136,10 @@ const ListDetailScreen = () => {
         setDeleteModelVisibility(false);
       }
     } catch (err: unknown) {
+      if (axios.isAxiosError(err) && err.response?.status === 403) {
+        logOut();
+        return;
+      } 
       if (axios.isAxiosError(err)) {
         alert(err.response?.data?.message || "Something went wrong");
       } else if (err instanceof Error) {
@@ -140,6 +154,10 @@ const ListDetailScreen = () => {
     try {
       const response = await axios.put(`${API_URL}/api/item/claim/${id}`);
     } catch (err: unknown) {
+      if (axios.isAxiosError(err) && err.response?.status === 403) {
+        logOut();
+        return;
+      }
       if (axios.isAxiosError(err)) {
         alert(err.response?.data?.message || "Something went wrong");
       }
@@ -248,7 +266,6 @@ const ListDetailScreen = () => {
                   name="people-outline"
                   size={24}
                   color="#2A7886"
-                  style={{ marginRight: 15 }}
                 />
               </Pressable>
             </View>
@@ -316,7 +333,7 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
-    paddingHorizontal: 15,
+    paddingHorizontal: 25,
     alignItems: "center",
     marginTop: 10,
     marginBottom: 20,
@@ -326,7 +343,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     marginTop: 5,
-    gap: 5,
+    gap: 2,
   },
   listName: {
     fontSize: 20,

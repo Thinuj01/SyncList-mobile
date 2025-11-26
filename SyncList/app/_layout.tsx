@@ -1,8 +1,10 @@
+import 'react-native-gesture-handler';
 import { Stack, router, useSegments } from 'expo-router';
 import { AuthProvider, useAuth } from '@/context/AuthContext';
 import { useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import 'react-native-reanimated';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 function AuthGuardLayout() {
   const { token, isLoading } = useAuth();
@@ -11,7 +13,7 @@ function AuthGuardLayout() {
   useEffect(() => {
     if (isLoading) return;
 
-    const inAuthGroup = segments.length === 0 || segments[0] === 'register';
+    const inAuthGroup = segments.length === 0 || segments[0] === 'register' || segments[0] === 'forget';
 
     if (token && inAuthGroup) {
       router.replace('/(tabs)');
@@ -26,6 +28,7 @@ function AuthGuardLayout() {
     <Stack>
       <Stack.Screen name="index" options={{ headerShown: false }} />
       <Stack.Screen name="register" options={{ headerShown: false }} />
+      <Stack.Screen name="forget" options={{ headerShown: false }} />
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
       <Stack.Screen name="list/[id]" options={{ headerShown: false }} />
       <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
@@ -35,10 +38,12 @@ function AuthGuardLayout() {
 
 const RootLayout = () => {
   return(
+    <GestureHandlerRootView>
     <AuthProvider>
         <AuthGuardLayout />
         <StatusBar style="auto" />
     </AuthProvider>
+    </GestureHandlerRootView>
   )
 }
 

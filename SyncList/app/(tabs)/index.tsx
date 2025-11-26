@@ -31,7 +31,7 @@ type DecodedToken = {
 };
 
 export default function HomeScreen() {
-  const { token, isLoading: isAuthLoading, name } = useAuth();
+  const { token, isLoading: isAuthLoading, name,logOut } = useAuth();
   const [userId, setUserId] = useState<string | null>(null);
 
   const [myLists, setMyLists] = useState<ShoppingList[]>([]);
@@ -66,7 +66,10 @@ export default function HomeScreen() {
 
       setMyLists(ownedLists);
       setJoinedLists(sharedLists);
-    } catch (error) {
+    } catch (error: any) {
+      if(error.response?.status === 403){
+        logOut();
+      }
       console.error(error);
       Alert.alert("Error", "Could not fetch your lists.");
     } finally {
@@ -92,8 +95,12 @@ export default function HomeScreen() {
           fetchLists();
           setActiveTab("my");
         }
-      } catch (err: unknown) {
-        // error handling
+      } catch (err: any) {
+        if (err.response?.status === 403) {
+          logOut();
+        } else {
+          Alert.alert("Error", "Could not add the list.");
+        }
       }
     }
   };
@@ -110,8 +117,12 @@ export default function HomeScreen() {
         fetchLists();
         setDeleteModelVisibility(false);
       }
-    } catch (err: unknown) {
-      // error handling
+    } catch (err: any) {
+      if (err.response?.status === 403) {
+        logOut();
+      } else {
+        Alert.alert("Error", "Could not add the list.");
+      }
     }
   };
 
@@ -136,7 +147,7 @@ export default function HomeScreen() {
       if (myLists.length === 0) {
         return (
           <Text style={styles.noListsText}>
-            You haven't created any lists yet.
+            You haven&apos;t created any lists yet.
           </Text>
         );
       }
@@ -154,7 +165,7 @@ export default function HomeScreen() {
       if (joinedLists.length === 0) {
         return (
           <Text style={styles.noListsText}>
-            You haven't joined any lists yet.
+            You haven&apos;t joined any lists yet.
           </Text>
         );
       }

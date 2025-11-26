@@ -10,6 +10,7 @@ type ItemListProps = {
       claimedBy: {
         _id: string;
         username: string;
+        profilePictureUrl: string;
       };
     }[];
     owner: string;

@@ -34,7 +34,6 @@ export default function MembersModal({ members, ownerId, isVisible, onClose }: P
                 </View>
                 <View style={styles.memberInfo}>
                     <Text style={styles.memberName}>{item.username} {ownerLabel}</Text>
-                    {/* <Text style={styles.memberEmail}>{item.email}</Text> */}
                 </View>
                 {isOwner && <Ionicons name="star" size={18} color="#FFD700" />}
             </View>
@@ -48,9 +47,7 @@ export default function MembersModal({ members, ownerId, isVisible, onClose }: P
             visible={isVisible} 
             onRequestClose={onClose}
         >
-            {/* Outer view to push content to the bottom */}
             <Pressable style={styles.centeredView} onPress={onClose}>
-                {/* Inner view that holds the content, stops the dismissal on press */}
                 <Pressable style={styles.modalView}> 
                     
                     <View style={styles.dragHandle} />
@@ -71,16 +68,14 @@ export default function MembersModal({ members, ownerId, isVisible, onClose }: P
 }
 
 const styles = StyleSheet.create({
-    // 1. CRITICAL: Use flex-end to push the content to the bottom
     centeredView: { 
         flex: 1,
         justifyContent: 'flex-end', 
-        backgroundColor: 'rgba(0, 0, 0, 0.5)', // Dark semi-transparent background
+        backgroundColor: 'rgba(0, 0, 0, 0.2)',
     },
-    // 2. CRITICAL: Define the content's appearance
     modalView: {
         width: '100%',
-        maxHeight: '85%', // Limit the height
+        maxHeight: '85%',
         backgroundColor: 'white',
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20,

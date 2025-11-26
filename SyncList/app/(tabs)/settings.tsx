@@ -79,6 +79,10 @@ export default function SettingsScreen() {
         }
       }
       catch(err : any) {
+        if (err.response?.status === 403) {
+          logOut();
+          return;
+        }
         console.error(err);
         Alert.alert("Error", err.response?.data?.message || "Could not update profile picture.");
       }
@@ -98,6 +102,10 @@ export default function SettingsScreen() {
       const response = await axios.get(`${API_URL}/api/auth/`);
       setUser(response.data.user);
     } catch (err) {
+      if (axios.isAxiosError(err) && err.response?.status === 403) {
+        logOut();
+        return;
+      }
       console.error(err);
       Alert.alert("Error", "Could not fetch your details.");
     }

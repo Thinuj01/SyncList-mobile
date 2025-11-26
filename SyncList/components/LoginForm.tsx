@@ -99,9 +99,18 @@ const LoginForm = () => {
         Not Registred yet?{" "}
         <Text
           style={styles.RegisterLink}
-          onPress={isLoading ? undefined : () => router.push("/register")} // 8. Disable link
+          onPress={isLoading ? undefined : () => router.push("/register")} 
         >
           Register
+        </Text>
+      </Text>
+      <Text style={styles.RegisterText}>
+        Forget Password?{" "}
+        <Text
+          style={styles.RegisterLink}
+          onPress={isLoading ? undefined : () => router.push("/forget")} 
+        >
+          Change
         </Text>
       </Text>
     </View>

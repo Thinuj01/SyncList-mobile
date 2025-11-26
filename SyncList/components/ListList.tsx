@@ -1,6 +1,6 @@
 import React from "react";
 import { FlatList, Pressable } from "react-native";
-import { Link } from "expo-router";
+import { Link, useRouter } from "expo-router";
 import ListItem from "./ListItem";
 
 type ListListProps = {
@@ -11,9 +11,9 @@ type ListListProps = {
   }[];
   fetchLists: () => void;
   isListLoading: boolean;
-  setDeleteModelVisibility:(visible: boolean)=>void;
-  setSelectedDeleteItemId:(visible: string) => void;
-  joined:boolean;
+  setDeleteModelVisibility: (visible: boolean) => void;
+  setSelectedDeleteItemId: (visible: string) => void;
+  joined: boolean;
 };
 
 const ListList: React.FC<ListListProps> = ({
@@ -22,19 +22,24 @@ const ListList: React.FC<ListListProps> = ({
   isListLoading,
   setDeleteModelVisibility,
   setSelectedDeleteItemId,
-  joined
+  joined,
 }) => {
+  const router = useRouter();
   return (
     <FlatList
       data={lists}
       scrollEnabled={false}
       keyExtractor={(item) => item._id}
       renderItem={({ item }) => (
-        <Link href={`/list/${item._id}`} asChild>
-          <Pressable>
-            <ListItem key={item._id} joined={joined} id={item._id} name={item.listName} setDeleteModelVisibility={setDeleteModelVisibility} setSelectedDeleteItemId={setSelectedDeleteItemId}/>
-          </Pressable>
-        </Link>
+        <ListItem
+          key={item._id}
+          joined={joined}
+          id={item._id}
+          name={item.listName}
+          setDeleteModelVisibility={setDeleteModelVisibility}
+          setSelectedDeleteItemId={setSelectedDeleteItemId}
+          onPress={() => router.push(`/list/${item._id}`)}
+        />
       )}
       onRefresh={fetchLists}
       refreshing={isListLoading}
