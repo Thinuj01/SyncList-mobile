@@ -2,14 +2,15 @@ import React from "react";
 import logo from "@/assets/images/SyncList Logo.png";
 import { StyleSheet, View, Text, Image } from "react-native";
 import ForgetPasswordForm from "@/components/ForgetPasswordForm";
+import ThemedView from "@/components/ThemedView";
 
 const ForgetPasswordScreen = () => {
   return (
-    <View style={styles.container}>
+    <ThemedView style={styles.container}>
       <Image source={logo} alt="SyncList Logo" style={styles.imageLogo} />
       <Text style={styles.title}>Password change</Text>
       <ForgetPasswordForm />
-    </View>
+    </ThemedView>
   );
 };
 

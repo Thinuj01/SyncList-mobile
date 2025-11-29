@@ -7,11 +7,14 @@ import {
   Alert,
   ActivityIndicator,
   Keyboard,
+  TouchableOpacity,
+  useColorScheme
 } from "react-native";
 import SyncListButton from "./SynListButton";
 import axios from "axios";
 import { API_URL } from "@/constants/api";
 import { useRouter } from "expo-router";
+import Icon from "react-native-vector-icons/Feather";
 
 const ForgetPasswordForm = () => {
   const [email, setEmail] = useState("");
@@ -25,6 +28,39 @@ const ForgetPasswordForm = () => {
   const [tempToken, setTempToken] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [reNewPassword, setReNewPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const colorScheme = useColorScheme();
+
+  const ResetPassword = async () => {
+    setIsLoading(true);
+    try {
+      const response = await axios.post(
+        `${API_URL}/api/auth/fwd`,
+        {
+          password: newPassword,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${tempToken}`,
+          },
+        }
+      );
+      if (response.status === 201) {
+        setIsLoading(false);
+        Alert.alert("Password Reset Successfully");
+        router.push("/");
+      }
+    } catch (err) {
+      setIsLoading(false);
+      if (axios.isAxiosError(err)) {
+        alert(err.response?.data?.message || "Something went wrong");
+      } else if (err instanceof Error) {
+        alert(err.message);
+      } else {
+        alert("An unexpected error occurred");
+      }
+    }
+  };
 
   const OtpVerify = async () => {
     const enteredOtp = otp.join("");
@@ -142,25 +178,57 @@ const ForgetPasswordForm = () => {
                 {minutes}:{seconds}
               </Text>
             </Text>
-            <TextInput
-              onChangeText={setNewPassword}
-              value={newPassword}
-              style={[styles.inputField]}
-              placeholder="Enter your New Password"
-              placeholderTextColor="rgba(0, 0, 0, 0.4)"
-              editable={!isLoading}
-            />
-            <TextInput
-              onChangeText={setReNewPassword}
-              value={reNewPassword}
-              style={[styles.inputField]}
-              placeholder="Re-Enter your New Password"
-              placeholderTextColor="rgba(0, 0, 0, 0.4)"
-            />
+            <View style={styles.passwordContainer}>
+              <TextInput
+                onChangeText={setNewPassword}
+                value={newPassword}
+                style={[styles.passwordField]}
+                placeholder="Enter your New Password"
+                placeholderTextColor={colorScheme==="dark"?"rgba(255, 255, 255, 0.41)":"rgba(0, 0, 0, 0.4)"}
+                secureTextEntry={!showPassword}
+                editable={!isLoading}
+              />
+              <TouchableOpacity
+                onPress={() => {
+                  setShowPassword(!showPassword);
+                }}
+                style={styles.eyeIcon}
+              >
+                <Icon
+                  name={showPassword ? "eye" : "eye-off"}
+                  size={20}
+                  color="#fff"
+                />
+              </TouchableOpacity>
+            </View>
+            <View style={styles.passwordContainer}>
+              <TextInput
+                onChangeText={setReNewPassword}
+                value={reNewPassword}
+                style={[styles.passwordField]}
+                placeholder="Re-Enter your New Password"
+                secureTextEntry={!showPassword}
+                placeholderTextColor={colorScheme==="dark"?"rgba(255, 255, 255, 0.41)":"rgba(0, 0, 0, 0.4)"}
+              />
+              <TouchableOpacity
+                onPress={() => {
+                  setShowPassword(!showPassword);
+                }}
+                style={styles.eyeIcon}
+              >
+                <Icon
+                  name={showPassword ? "eye" : "eye-off"}
+                  size={20}
+                  color="#fff"
+                />
+              </TouchableOpacity>
+            </View>
             <SyncListButton
               type="primary"
               style={styles.LoginButton}
-              onClick={() => {}}
+              onClick={() => {
+                ResetPassword();
+              }}
               disabled={isLoading}
             >
               {isLoading ? (
@@ -233,7 +301,7 @@ const ForgetPasswordForm = () => {
             value={email}
             style={[styles.inputField]}
             placeholder="Enter your Email"
-            placeholderTextColor="rgba(0, 0, 0, 0.4)"
+            placeholderTextColor={colorScheme==="dark"?"rgba(255, 255, 255, 0.41)":"rgba(0, 0, 0, 0.4)"}
             editable={!isLoading}
           />
           <SyncListButton
@@ -335,6 +403,34 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: "bold",
     color: "#59A6D9",
+  },
+  passwordContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    width: "90%",
+  },
+  eyeIcon: {
+    backgroundColor: "#2A7886",
+    paddingVertical: 13.2,
+    paddingHorizontal: 4,
+    borderTopRightRadius: 10,
+    borderBottomRightRadius: 10,
+    borderWidth: 2,
+    borderColor: "#2A7886",
+    marginTop: 20,
+  },
+  passwordField: {
+    width: "90%",
+    paddingVertical: 15,
+    paddingHorizontal: 10,
+    borderWidth: 2,
+    borderColor: "#2A7886",
+    borderTopLeftRadius: 10,
+    borderBottomLeftRadius: 10,
+    color: "#2A7886",
+    marginTop: 20,
+    fontSize: 16,
   },
 });
 

@@ -15,6 +15,9 @@ import { API_URL } from "@/constants/api";
 import { MaterialCommunityIcons, Ionicons } from "@expo/vector-icons";
 import HeaderSection from "@/components/HeaderSection";
 import axios from "axios";
+import ThemedView from "@/components/ThemedView";
+import ThemedText from "@/components/ThemedText";
+import { useColorScheme } from "react-native";
 
 type userProps = {
   _id: string;
@@ -28,6 +31,7 @@ export default function SettingsScreen() {
   const [isChecking, setIsChecking] = useState(true);
   const [profileImage, setProfileImage] = useState<string | null>(profilePic);
   const [user, setUser] = useState<userProps | null>(null);
+  const colorScheme = useColorScheme();
 
   const checkServerStatus = async () => {
     setIsChecking(true);
@@ -124,11 +128,11 @@ export default function SettingsScreen() {
   };
 
   return (
-    <View style={styles.container}>
+    <ThemedView style={styles.container}>
       <HeaderSection />
       <View style={styles.content}>
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Profile</Text>
+          <ThemedText style={styles.sectionTitle}>Profile</ThemedText>
           <View style={styles.profileRow}>
             <TouchableOpacity
               onPress={pickImage}
@@ -146,28 +150,28 @@ export default function SettingsScreen() {
               )}
             </TouchableOpacity>
             <View>
-              <Text style={styles.sectionText}>{user?.username}</Text>
-              <Text style={styles.sectionEmailText}>{user?.email}</Text>
+              <ThemedText style={styles.sectionText}>{user?.username}</ThemedText>
+              <ThemedText style={styles.sectionEmailText}>{user?.email}</ThemedText>
               <TouchableOpacity onPress={pickImage}>
-                <Text style={styles.editPhotoText}>Edit Photo</Text>
+                <ThemedText style={styles.editPhotoText}>Edit Photo</ThemedText>
               </TouchableOpacity>
             </View>
           </View>
         </View>
 
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Connectivity</Text>
+          <ThemedText style={styles.sectionTitle}>Connectivity</ThemedText>
           <View style={styles.settingRow}>
-            <Text>API Status ({API_URL.split("//")[1]})</Text>
+            <ThemedText>API Status ({API_URL.split("//")[1]})</ThemedText>
             {renderStatusIcon()}
           </View>
-          <Text style={styles.versionText}>App Version: 1.0.0</Text>
+          <ThemedText style={styles.versionText}>App Version: 1.0.0</ThemedText>
         </View>
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Account Actions</Text>
+          <ThemedText style={styles.sectionTitle}>Account Actions</ThemedText>
 
           <View style={styles.settingRow}>
-            <Text>Change Password</Text>
+            <ThemedText>Change Password</ThemedText>
             <Ionicons name="chevron-forward" size={24} color="gray" />
           </View>
 
@@ -178,14 +182,13 @@ export default function SettingsScreen() {
           © {new Date().getFullYear()} SyncList - All rights reserved.
         </Text>
       </View>
-    </View>
+    </ThemedView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
   },
   content: {
     padding: 20,
@@ -200,7 +203,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     marginBottom: 10,
-    color: "#333",
   },
   profileRow: {
     flexDirection: "row",
@@ -232,12 +234,12 @@ const styles = StyleSheet.create({
   sectionText: {
     fontSize: 16,
     fontWeight: "500",
-    color: "#333",
+    
   },
   sectionEmailText: {
     fontSize: 14,
     fontWeight: "300",
-    color: "#333",
+    
     marginTop: 3,
   },
   editPhotoText: {

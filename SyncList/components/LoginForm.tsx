@@ -6,12 +6,15 @@ import {
   Text,
   Alert,
   ActivityIndicator,
+  TouchableOpacity,
 } from "react-native";
 import SyncListButton from "./SynListButton";
 import axios from "axios";
 import { useRouter } from "expo-router";
 import { API_URL } from "@/constants/api";
 import { useAuth } from "@/context/AuthContext";
+import Icon from "react-native-vector-icons/Feather";
+import { useColorScheme } from "react-native";
 
 const LoginForm = () => {
   const [email, setEmail] = useState("");
@@ -20,8 +23,9 @@ const LoginForm = () => {
   const [isPasswordFocused, setIsPasswordFocused] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-
+  const [showPassword, setShowPassword] = useState(false);
   const { logIn } = useAuth();
+  const colorScheme = useColorScheme();
 
   const onLogin = async () => {
     if (!email || !password) {
@@ -30,7 +34,7 @@ const LoginForm = () => {
     }
 
     setIsLoading(true);
-    
+
     try {
       const response = await axios.post(`${API_URL}/api/auth/login`, {
         email: email,
@@ -38,7 +42,11 @@ const LoginForm = () => {
       });
 
       if (response.data.token) {
-        await logIn(response.data.token, response.data.name, response.data.profilePic);
+        await logIn(
+          response.data.token,
+          response.data.name,
+          response.data.profilePic
+        );
         console.log("Logged: " + response.data.profilePic);
       }
     } catch (err: unknown) {
@@ -61,45 +69,59 @@ const LoginForm = () => {
         value={email}
         style={[styles.emailField, isEmailFocused && styles.emailFieldFocused]}
         placeholder="Enter your Email"
-        placeholderTextColor="rgba(0, 0, 0, 0.4)"
+        placeholderTextColor={colorScheme==="dark"?"rgba(255, 255, 255, 0.41)":"rgba(0, 0, 0, 0.4)"}
         onFocus={() => setIsEmailFocused(true)}
         onBlur={() => setIsEmailFocused(false)}
         editable={!isLoading}
         autoCapitalize="none"
         keyboardType="email-address"
       />
-      <TextInput
-        onChangeText={setPassword}
-        value={password}
-        style={[
-          styles.emailField,
-          isPasswordFocused && styles.emailFieldFocused,
-        ]}
-        placeholder="Enter your Password"
-        placeholderTextColor="rgba(0, 0, 0, 0.4)"
-        onFocus={() => setIsPasswordFocused(true)}
-        onBlur={() => setIsPasswordFocused(false)}
-        secureTextEntry={true}
-        editable={!isLoading}
-      />
+      <View style={styles.passwordContainer}>
+        <TextInput
+          onChangeText={setPassword}
+          value={password}
+          style={[
+            styles.passwordField,
+            isPasswordFocused && styles.emailFieldFocused,
+          ]}
+          placeholder="Enter your Password"
+          placeholderTextColor={colorScheme==="dark"?"rgba(255, 255, 255, 0.41)":"rgba(0, 0, 0, 0.4)"}
+          onFocus={() => setIsPasswordFocused(true)}
+          onBlur={() => setIsPasswordFocused(false)}
+          secureTextEntry={!showPassword}
+          editable={!isLoading}
+          textContentType="oneTimeCode"
+          autoCorrect={false}
+          autoCapitalize="none"
+        />
+        <TouchableOpacity
+          onPress={() => {
+            setShowPassword(!showPassword);
+          }}
+          style={styles.eyeIcon}
+        >
+          <Icon
+            name={showPassword ? "eye" : "eye-off"}
+            size={20}
+            color="#fff"
+          />
+        </TouchableOpacity>
+      </View>
+
       <SyncListButton
         type="primary"
         style={styles.LoginButton}
         onClick={onLogin}
         disabled={isLoading}
       >
-        {isLoading ? (
-          <ActivityIndicator color="#FFFFFF" />
-        ) : (
-          "Login"
-        )}
+        {isLoading ? <ActivityIndicator color="#FFFFFF" /> : "Login"}
       </SyncListButton>
 
       <Text style={styles.RegisterText}>
         Not Registred yet?{" "}
         <Text
           style={styles.RegisterLink}
-          onPress={isLoading ? undefined : () => router.push("/register")} 
+          onPress={isLoading ? undefined : () => router.push("/register")}
         >
           Register
         </Text>
@@ -108,7 +130,7 @@ const LoginForm = () => {
         Forget Password?{" "}
         <Text
           style={styles.RegisterLink}
-          onPress={isLoading ? undefined : () => router.push("/forget")} 
+          onPress={isLoading ? undefined : () => router.push("/forget")}
         >
           Change
         </Text>
@@ -136,6 +158,18 @@ const styles = StyleSheet.create({
     marginTop: 20,
     fontSize: 16,
   },
+  passwordField: {
+    width: "90%",
+    paddingVertical: 15,
+    paddingHorizontal: 10,
+    borderWidth: 2,
+    borderColor: "#2A7886",
+    borderTopLeftRadius: 10,
+    borderBottomLeftRadius: 10,
+    color: "#2A7886",
+    marginTop: 20,
+    fontSize: 16,
+  },
   emailFieldFocused: {
     borderColor: "#59A6D9",
   },
@@ -152,6 +186,22 @@ const styles = StyleSheet.create({
     marginTop: 20,
     fontSize: 13,
     color: "#2A7886",
+  },
+  passwordContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    width: "90%",
+  },
+  eyeIcon: {
+    backgroundColor: "#2A7886",
+    paddingVertical: 13.2,
+    paddingHorizontal: 4,
+    borderTopRightRadius: 10,
+    borderBottomRightRadius: 10,
+    borderWidth: 2,
+    borderColor: "#2A7886",
+    marginTop: 20,
   },
 });
 

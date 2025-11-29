@@ -7,7 +7,8 @@ import {
   Pressable,
 } from "react-native"; // Added Pressable
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import { Swipeable } from "react-native-gesture-handler"; // Import Swipeable
+import { Swipeable } from "react-native-gesture-handler";
+import { useColorScheme } from "react-native";
 
 type ListItemProps = {
   id: string;
@@ -26,9 +27,10 @@ const ListItem: React.FC<ListItemProps> = ({
   joined,
   onPress,
 }) => {
-  // 1. Function to render the swipe action button
+  
+  const colorScheme = useColorScheme();
+
   const renderRightActions = () => {
-    // We only allow deleting lists that are NOT joined (i.e., lists the user owns).
     if (joined) {
       return null;
     }
@@ -66,7 +68,6 @@ const ListItem: React.FC<ListItemProps> = ({
 const styles = StyleSheet.create({
   listItem: {
     width: "100%",
-    backgroundColor: 'white',
     paddingVertical: 15,
     paddingHorizontal: 30,
     borderWidth: 1,

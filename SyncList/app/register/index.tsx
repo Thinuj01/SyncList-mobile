@@ -2,14 +2,15 @@ import React from "react";
 import logo from '@/assets/images/SyncList Logo.png'
 import { StyleSheet, View, Text, Image } from "react-native";
 import RegisterForm from "@/components/RegisterForm";
+import ThemedView from "@/components/ThemedView";
 
 const RegisterScreen = () => {
   return (
-    <View style={styles.container}>
+    <ThemedView style={styles.container}>
       <Image source={logo} alt="SyncList Logo" style={styles.imageLogo} />
       <Text style={styles.title}>Register with SyncList</Text>
       <RegisterForm/>
-    </View>
+    </ThemedView>
   );
 };
 

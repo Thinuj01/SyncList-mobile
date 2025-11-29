@@ -2,11 +2,11 @@ import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   Alert,
-  View,
   Text,
   ActivityIndicator,
   ScrollView,
   Pressable,
+  useColorScheme
 } from "react-native";
 import axios from "axios";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
@@ -19,6 +19,7 @@ import HeaderSection from "@/components/HeaderSection";
 import SyncListButton from "@/components/SynListButton";
 import AddListModel from "@/components/AddListModel";
 import DeleteModel from "@/components/DeleteModel";
+import ThemedView from "@/components/ThemedView";
 
 type ShoppingList = {
   _id: string;
@@ -43,6 +44,7 @@ export default function HomeScreen() {
   const [newList, setNewList] = useState("");
   const [deleteModelVisibility, setDeleteModelVisibility] = useState(false);
   const [selectedDeleteItemId, setSelectedDeleteItemId] = useState("");
+  const colorScheme = useColorScheme();
 
   useEffect(() => {
     if (token) {
@@ -183,14 +185,14 @@ export default function HomeScreen() {
   };
 
   return (
-    <View style={styles.mainContainer}> 
+    <ThemedView style={styles.mainContainer}> 
       <ScrollView style={styles.scrollContainer}>
         <HeaderSection />
 
         <Text style={styles.welcomeText}>Hello {name}</Text>
 
-        <View style={styles.tabContainer}>
-          <View style={styles.tabsWrapper}>
+        <ThemedView style={ colorScheme==='dark'? {...styles.tabContainer,borderBottomColor: 'rgb(36, 36, 36)'}: {...styles.tabContainer, borderBottomColor: '#eee'}}>
+          <ThemedView style={styles.tabsWrapper}>
             <Pressable
               onPress={() => setActiveTab("my")}
               style={[
@@ -224,7 +226,7 @@ export default function HomeScreen() {
                 Joined Lists
               </Text>
             </Pressable>
-          </View>
+          </ThemedView>
 
           <FontAwesome
             name="refresh"
@@ -233,14 +235,14 @@ export default function HomeScreen() {
             onPress={() => fetchLists()}
             style={styles.refreshIcon}
           />
-        </View>
+        </ThemedView>
 
-        <View style={styles.listContainer}>
+        <ThemedView style={styles.listContainer}>
           {renderContent()}
-        </View>
+        </ThemedView>
       </ScrollView>
 
-      <View style={styles.footerContainer}>
+      <ThemedView style={ colorScheme==='dark'? {...styles.footerContainer,borderTopColor: 'rgb(36, 36, 36)'}: {...styles.footerContainer, borderTopColor: '#eee'}}>
         <SyncListButton
           onClick={() => setIsAddListModalOpen(true)}
           type="primary"
@@ -249,7 +251,7 @@ export default function HomeScreen() {
         >
           Add a List
         </SyncListButton>
-      </View>
+      </ThemedView>
 
       {isAddListModalOpen && (
         <AddListModel
@@ -269,14 +271,13 @@ export default function HomeScreen() {
           deleteMethod={deleteList}
         />
       )}
-    </View>
+    </ThemedView>
   );
 }
 
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1, 
-    backgroundColor: '#fff',
   },
   scrollContainer: {
     flex: 1,
@@ -296,7 +297,6 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginBottom: 10,
     borderBottomWidth: 1,
-    borderBottomColor: "#E0E0E0",
   },
   tabsWrapper: {
     flexDirection: "row",
@@ -339,9 +339,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingBottom: 20,
     paddingTop: 10,
-    backgroundColor: '#fff',
     borderTopWidth: 1,
-    borderTopColor: '#eee',
   },
   addListButton: {
     width: "100%",
