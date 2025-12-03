@@ -1,6 +1,8 @@
 import React from 'react';
 import { Modal, View, Text, StyleSheet, Pressable, FlatList, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import ThemedView from './ThemedView';
+import { useColorScheme } from 'react-native';
 
 type Member = {
     _id: string;
@@ -18,25 +20,26 @@ type Props = {
 export default function MembersModal({ members, ownerId, isVisible, onClose }: Props) {
 
     const sortedMembers = members.sort((a, b) => (a._id === ownerId ? -1 : b._id === ownerId ? 1 : 0));
+    const colorScheme = useColorScheme();
 
     const renderMember = ({ item }: { item: Member }) => {
         const isOwner = item._id === ownerId;
         const ownerLabel = isOwner ? ' (Owner)' : '';
 
         return (
-            <View style={styles.memberRow}>
-                <View style={styles.avatarContainer}>
+            <ThemedView style={styles.memberRow}>
+                <ThemedView style={styles.avatarContainer}>
                     {item.profilePictureUrl ? (
                         <Image source={{ uri: item.profilePictureUrl }} style={styles.avatar} />
                     ) : (
                         <Ionicons name="person-circle-outline" size={40} color="#2A7886" />
                     )}
-                </View>
-                <View style={styles.memberInfo}>
-                    <Text style={styles.memberName}>{item.username} {ownerLabel}</Text>
-                </View>
+                </ThemedView>
+                <ThemedView style={styles.memberInfo}>
+                    <Text style={colorScheme==="dark"?{...styles.memberName,color:'white'}:{...styles.memberName}}>{item.username} {ownerLabel}</Text>
+                </ThemedView>
                 {isOwner && <Ionicons name="star" size={18} color="#FFD700" />}
-            </View>
+            </ThemedView>
         );
     };
 
@@ -48,7 +51,7 @@ export default function MembersModal({ members, ownerId, isVisible, onClose }: P
             onRequestClose={onClose}
         >
             <Pressable style={styles.centeredView} onPress={onClose}>
-                <Pressable style={styles.modalView}> 
+                <Pressable style={colorScheme==="dark"?{...styles.modalView,backgroundColor:'#0B0E16',borderColor:'#2A7886',borderWidth:2}:{...styles.modalView,backgroundColor:'white'}} onPress={(e) => e.stopPropagation()}>
                     
                     <View style={styles.dragHandle} />
                     
@@ -71,7 +74,7 @@ const styles = StyleSheet.create({
     centeredView: { 
         flex: 1,
         justifyContent: 'flex-end', 
-        backgroundColor: 'rgba(0, 0, 0, 0.2)',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
     },
     modalView: {
         width: '100%',

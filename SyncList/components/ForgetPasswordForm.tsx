@@ -339,6 +339,7 @@ const styles = StyleSheet.create({
   },
   inputField: {
     width: "90%",
+    height: 55,
     paddingVertical: 15,
     paddingHorizontal: 10,
     borderWidth: 2,
@@ -411,6 +412,7 @@ const styles = StyleSheet.create({
     width: "90%",
   },
   eyeIcon: {
+    height: 55,
     backgroundColor: "#2A7886",
     paddingVertical: 13.2,
     paddingHorizontal: 4,
@@ -421,6 +423,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   passwordField: {
+    height: 55,
     width: "90%",
     paddingVertical: 15,
     paddingHorizontal: 10,

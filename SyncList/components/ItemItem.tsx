@@ -12,6 +12,8 @@ import { useAuth } from "@/context/AuthContext";
 import { jwtDecode } from "jwt-decode";
 import { Ionicons } from "@expo/vector-icons";
 import { Swipeable } from "react-native-gesture-handler";
+import ThemedView from "./ThemedView";
+import { useColorScheme } from "react-native";
 
 type ItemItemProps = {
   id: string;
@@ -47,6 +49,7 @@ const ItemItem: React.FC<ItemItemProps> = ({
   const [isClaimLoading, setIsClaimLoading] = useState(false);
   const { token } = useAuth();
   const [userId, setUserId] = useState<string | null>(null);
+  const colorScheme = useColorScheme();
 
   useEffect(() => {
     if (token) {
@@ -79,8 +82,8 @@ const ItemItem: React.FC<ItemItemProps> = ({
       friction={2}
       rightThreshold={40}
     >
-      <View style={styles.listItemContainer}>
-        <View style={styles.listItem}>
+      <ThemedView style={styles.listItemContainer}>
+        <ThemedView style={styles.listItem}>
           <Text style={styles.listText}>{item.itemName}</Text>
           {item.isClaimed ? (
             userId === item.claimedBy._id ? (
@@ -128,13 +131,13 @@ const ItemItem: React.FC<ItemItemProps> = ({
             </TouchableOpacity>
           )}
 
-        </View>
+        </ThemedView>
         {item.isClaimed &&
           (userId === item.claimedBy._id ? (
             <Text style={styles.claimedByMeText}>Claimed by me</Text>
           ) : (
-            <View style={styles.listClaimedByContainer}>
-              <View style={styles.avatarContainer}>
+            <ThemedView style={ colorScheme==='dark'? {...styles.listClaimedByContainer,borderTopColor: 'rgb(36, 36, 36)'}: {...styles.listClaimedByContainer, borderTopColor: '#eee'}}>
+              <ThemedView style={styles.avatarContainer}>
                 {item.claimedBy.profilePictureUrl ? (
                   <Image
                     source={{ uri: item.claimedBy.profilePictureUrl }}
@@ -147,13 +150,13 @@ const ItemItem: React.FC<ItemItemProps> = ({
                     color="#2A7886"
                   />
                 )}
-              </View>
+              </ThemedView>
               <Text style={styles.claimedByUsername}>
                 {item.claimedBy.username}
               </Text>
-            </View>
+            </ThemedView>
           ))}
-      </View>
+      </ThemedView>
     </Swipeable>
   );
 };
@@ -167,7 +170,6 @@ const styles = StyleSheet.create({
     borderColor: "#2A7886",
     marginBottom: 10,
     borderRadius: 8,
-    backgroundColor: 'white',
     minHeight: 60,
   },
   listItem: {
@@ -196,18 +198,18 @@ const styles = StyleSheet.create({
   claimButtonText: {
     color: "white",
     fontSize: 16,
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
   },
   claimedText: {
     fontSize: 16,
     color: 'darkgreen',
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
     marginLeft: 'auto',
   },
   claimedByMeText: {
     fontSize: 14,
     color: 'darkgreen',
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
     marginTop: 5,
   },
   avatarContainer: {

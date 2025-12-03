@@ -4,17 +4,19 @@ import { View, Image, StyleSheet, TouchableOpacity } from "react-native";
 import logo from "@/assets/images/SyncList Logo Header.png";
 import { Ionicons } from "@expo/vector-icons";
 import Entypo from "@expo/vector-icons/Entypo";
+import { useColorScheme } from "react-native";
 
 const HeaderSection = () => {
   const router = useRouter();
   const pathname = usePathname();
   const isDetailPage = pathname.includes("/list/");
+  const colorScheme = useColorScheme();
   return (
     <View style={styles.headerSection}>
       <Image source={logo} alt="SyncList Logo" style={styles.imageLogo} />
       {isDetailPage && (
         <TouchableOpacity
-          style={styles.homeButton}
+          style={colorScheme==="dark"?{...styles.homeButton,backgroundColor:'rgb(1, 0, 21)'}:{...styles.homeButton,backgroundColor:'#fff'}}
           onPress={() => router.replace("/(tabs)")}
         >
           <Ionicons name="arrow-back-outline" size={25} color="#2A7886" />

@@ -11,7 +11,7 @@ export default function TabLayout() {
         headerShown: false,
         tabBarActiveTintColor: '#59A6D9',
         tabBarStyle: {
-          backgroundColor: colorScheme === 'dark' ? 'rgb(1, 0, 21)' : 'white',
+          backgroundColor: colorScheme === 'dark' ? '#0B0E16' : 'white',
           borderTopWidth: 1,
           borderTopColor: colorScheme === 'dark' ? 'rgb(36, 36, 36)' : '#eee',
         },

@@ -3,6 +3,7 @@ import { StyleSheet, View, Modal, Pressable, Text } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
 import { Ionicons } from '@expo/vector-icons';
 import logo from '@/assets/images/SyncList Logo.png'
+import ThemedView from './ThemedView';
 
 type QRModelProps = {
     listId: string,
@@ -20,30 +21,26 @@ const ShareQRModal: React.FC<QRModelProps> = ({ listId, listName, isVisible, onC
     visible={isVisible}
     onRequestClose={onClose}
     >
-<View style={styles.centeredView}>
-        <View style={styles.modalView}>
+<ThemedView style={styles.centeredView}>
+        <ThemedView style={styles.modalView}>
           <Pressable onPress={onClose} style={styles.closeButton}>
             <Ionicons name="close-circle" size={30} color="gray" />
           </Pressable>
           
-          <Text style={styles.modalTitle}>Share {listName}</Text>
+          <Text style={styles.modalTitle}>{listName}</Text>
           <Text style={styles.modalSubtitle}>Scan this code to join the list.</Text>
 
-          <View style={styles.qrContainer}>
+          <ThemedView style={styles.qrContainer}>
             <QRCode
               value={qrValue}
               size={200}
               color="#000000"
               backgroundColor="#FFFFFF"
               logo={logo}
-              // You can embed the app logo in the center here if you like!
             />
-          </View>
-          
-          <Text style={styles.idText}>Scan Me</Text>
-
-        </View>
-      </View>
+          </ThemedView>
+        </ThemedView>
+      </ThemedView>
 
     </Modal>
   )
@@ -58,7 +55,8 @@ const styles = StyleSheet.create({
     },
     modalView: {
       margin: 20,
-      backgroundColor: 'white',
+      borderColor: '#2A7886',
+      borderWidth: 2,
       borderRadius: 20,
       padding: 35,
       alignItems: 'center',
@@ -74,16 +72,17 @@ const styles = StyleSheet.create({
     closeButton: {
       position: 'absolute',
       top: 10,
-      right: 10,
+      right: 10
     },
     modalTitle: {
       fontSize: 22,
       fontWeight: 'bold',
+      marginTop: 20,
       marginBottom: 10,
       color: '#2A7886',
     },
     modalSubtitle: {
-      fontSize: 14,
+      fontSize: 15,
       marginBottom: 20,
       color: 'gray',
     },

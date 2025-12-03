@@ -4,7 +4,6 @@ import React, { useState, useEffect, useFocusEffect } from "react";
 import io from "socket.io-client";
 import Entypo from "@expo/vector-icons/Entypo";
 import {
-  View,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -24,7 +23,7 @@ import ShareQRModal from "@/components/ShareQRModal";
 import { Ionicons } from "@expo/vector-icons";
 import MembersModal from "@/components/MembersModel";
 import { jwtDecode } from "jwt-decode";
-
+import ThemedView from "@/components/ThemedView";
 
 type itemProp = {
   _id: string;
@@ -232,19 +231,19 @@ const ListDetailScreen = () => {
   const showLoading = isAuthLoading || isListLoading;
 
   return (
-    <View style={styles.container}>
+    <ThemedView style={styles.container}>
       <ShareQRModal
         listId={id}
-        listName={"Hello"}
+        listName={items && items.listName ? items.listName : "Shopping List"}
         isVisible={isQRModalVisible}
         onClose={() => setIsQRModalVisible(false)}
       />
       <HeaderSection />
-      <View style={styles.header}>
+      <ThemedView style={styles.header}>
         {!showLoading && (
           <>
             <Text style={styles.listName}>{items && items.listName}</Text>
-            <View style={styles.headerIcons}>
+            <ThemedView style={styles.headerIcons}>
               <Pressable onPress={() => setIsQRModalVisible(true)}>
                 <Ionicons
                   name="share-social-outline"
@@ -268,10 +267,10 @@ const ListDetailScreen = () => {
                   color="#2A7886"
                 />
               </Pressable>
-            </View>
+            </ThemedView>
           </>
         )}
-      </View>
+      </ThemedView>
       {showLoading ? (
         <ActivityIndicator size="small" color="#2A7886" />
       ) : (
@@ -321,7 +320,7 @@ const ListDetailScreen = () => {
           onClose={() => setMemberModelVisible(false)}
         />
       )}
-    </View>
+    </ThemedView>
   );
 };
 

@@ -1,11 +1,10 @@
 import React from "react";
 import {
-  View,
   Text,
   StyleSheet,
   TouchableOpacity,
   Pressable,
-} from "react-native"; // Added Pressable
+} from "react-native";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { Swipeable } from "react-native-gesture-handler";
 import { useColorScheme } from "react-native";
@@ -56,7 +55,7 @@ const ListItem: React.FC<ListItemProps> = ({
       friction={2}
       rightThreshold={40}
     >
-      <Pressable onPress={onPress} style={styles.listItem}>
+      <Pressable onPress={onPress} style={colorScheme==="dark"?{...styles.listItem,backgroundColor:'#0B0E16'}:{...styles.listItem,backgroundColor:'rgb(240,240,240)'}}>
         <Text style={styles.listText}>{name}</Text>
 
         {joined && <Text style={styles.joinedLabel}>Joined</Text>}

@@ -18,6 +18,7 @@ import axios from "axios";
 import ThemedView from "@/components/ThemedView";
 import ThemedText from "@/components/ThemedText";
 import { useColorScheme } from "react-native";
+import SyncListButton from "@/components/SynListButton";
 
 type userProps = {
   _id: string;
@@ -66,29 +67,35 @@ export default function SettingsScreen() {
       const imageUri = result.assets[0].uri;
       const formData = new FormData();
 
-      formData.append('profilePicture', {
+      formData.append("profilePicture", {
         uri: imageUri,
         name: `profile-${user?._id || Date.now()}.jpg`,
-        type: 'image/jpeg',
-    } as any);
-      try{
-        const response = await axios.put(`${API_URL}/api/auth/profile`, formData, {
-          headers: {
-              'Authorization': `Bearer ${token}`, 
-          },
-      });
+        type: "image/jpeg",
+      } as any);
+      try {
+        const response = await axios.put(
+          `${API_URL}/api/auth/profile`,
+          formData,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
         if (response.status === 200) {
           setProfileImage(result.assets[0].uri);
           Alert.alert("Success", "Profile picture updated successfully!");
         }
-      }
-      catch(err : any) {
+      } catch (err: any) {
         if (err.response?.status === 403) {
           logOut();
           return;
         }
         console.error(err);
-        Alert.alert("Error", err.response?.data?.message || "Could not update profile picture.");
+        Alert.alert(
+          "Error",
+          err.response?.data?.message || "Could not update profile picture."
+        );
       }
       setProfileImage(result.assets[0].uri);
     }
@@ -131,7 +138,13 @@ export default function SettingsScreen() {
     <ThemedView style={styles.container}>
       <HeaderSection />
       <View style={styles.content}>
-        <View style={styles.section}>
+        <View
+          style={
+            colorScheme === "dark"
+              ? { ...styles.section, borderBottomColor: "rgb(36, 36, 36)" }
+              : { ...styles.section, borderBottomColor: "#eee" }
+          }
+        >
           <ThemedText style={styles.sectionTitle}>Profile</ThemedText>
           <View style={styles.profileRow}>
             <TouchableOpacity
@@ -150,8 +163,12 @@ export default function SettingsScreen() {
               )}
             </TouchableOpacity>
             <View>
-              <ThemedText style={styles.sectionText}>{user?.username}</ThemedText>
-              <ThemedText style={styles.sectionEmailText}>{user?.email}</ThemedText>
+              <ThemedText style={styles.sectionText}>
+                {user?.username}
+              </ThemedText>
+              <ThemedText style={styles.sectionEmailText}>
+                {user?.email}
+              </ThemedText>
               <TouchableOpacity onPress={pickImage}>
                 <ThemedText style={styles.editPhotoText}>Edit Photo</ThemedText>
               </TouchableOpacity>
@@ -159,7 +176,13 @@ export default function SettingsScreen() {
           </View>
         </View>
 
-        <View style={styles.section}>
+        <View
+          style={
+            colorScheme === "dark"
+              ? { ...styles.section, borderBottomColor: "rgb(36, 36, 36)" }
+              : { ...styles.section, borderBottomColor: "#eee" }
+          }
+        >
           <ThemedText style={styles.sectionTitle}>Connectivity</ThemedText>
           <View style={styles.settingRow}>
             <ThemedText>API Status ({API_URL.split("//")[1]})</ThemedText>
@@ -175,7 +198,14 @@ export default function SettingsScreen() {
             <Ionicons name="chevron-forward" size={24} color="gray" />
           </View>
 
-          <Button title="Logout" onPress={logOut} color="red" />
+          <SyncListButton
+            type="primary"
+            onClick={logOut}
+            disabled={false}
+            style={{ backgroundColor: "rgb(122, 1, 1)", marginTop: 60 }}
+          >
+            Logout
+          </SyncListButton>
         </View>
 
         <Text style={styles.footerText}>
@@ -197,7 +227,6 @@ const styles = StyleSheet.create({
     marginBottom: 30,
     paddingVertical: 10,
     borderBottomWidth: 1,
-    borderBottomColor: "#eee",
   },
   sectionTitle: {
     fontSize: 18,
@@ -234,12 +263,11 @@ const styles = StyleSheet.create({
   sectionText: {
     fontSize: 16,
     fontWeight: "500",
-    
   },
   sectionEmailText: {
     fontSize: 14,
     fontWeight: "300",
-    
+
     marginTop: 3,
   },
   editPhotoText: {
@@ -261,7 +289,7 @@ const styles = StyleSheet.create({
   },
   footerText: {
     textAlign: "center",
-    marginTop: 40,
+    marginTop: 5,
     fontSize: 12,
     color: "gray",
   },

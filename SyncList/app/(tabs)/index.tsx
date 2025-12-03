@@ -73,7 +73,7 @@ export default function HomeScreen() {
         logOut();
       }
       console.error(error);
-      Alert.alert("Error", "Could not fetch your lists.");
+      Alert.alert("Error", error.response?.data?.message || "Could not fetch your lists.");
     } finally {
       setIsListLoading(false);
     }
@@ -189,7 +189,7 @@ export default function HomeScreen() {
       <ScrollView style={styles.scrollContainer}>
         <HeaderSection />
 
-        <Text style={styles.welcomeText}>Hello {name}</Text>
+        <Text style={styles.welcomeText}>Welcome {name}</Text>
 
         <ThemedView style={ colorScheme==='dark'? {...styles.tabContainer,borderBottomColor: 'rgb(36, 36, 36)'}: {...styles.tabContainer, borderBottomColor: '#eee'}}>
           <ThemedView style={styles.tabsWrapper}>
@@ -339,7 +339,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingBottom: 20,
     paddingTop: 10,
-    borderTopWidth: 1,
   },
   addListButton: {
     width: "100%",
