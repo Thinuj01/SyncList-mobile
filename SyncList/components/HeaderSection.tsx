@@ -3,7 +3,6 @@ import { useRouter, usePathname } from "expo-router";
 import { View, Image, StyleSheet, TouchableOpacity } from "react-native";
 import logo from "@/assets/images/SyncList Logo Header.png";
 import { Ionicons } from "@expo/vector-icons";
-import Entypo from "@expo/vector-icons/Entypo";
 import { useColorScheme } from "react-native";
 
 const HeaderSection = () => {

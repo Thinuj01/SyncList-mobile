@@ -82,9 +82,9 @@ const ItemItem: React.FC<ItemItemProps> = ({
       friction={2}
       rightThreshold={40}
     >
-      <ThemedView style={styles.listItemContainer}>
-        <ThemedView style={styles.listItem}>
-          <Text style={styles.listText}>{item.itemName}</Text>
+      <ThemedView style={colorScheme==='dark'?{...styles.listItemContainer}:{...styles.listItemContainer, backgroundColor: 'rgb(240,240,240)'}}>
+        <ThemedView style={colorScheme==='dark'?{...styles.listItem}:{...styles.listItem, backgroundColor: 'rgb(240,240,240)'}}>
+          <Text style={colorScheme=='dark'?{...styles.listText, color: '#FAFAFA'}:{...styles.listText}}>{item.itemName}</Text>
           {item.isClaimed ? (
             userId === item.claimedBy._id ? (
               <TouchableOpacity
@@ -102,12 +102,12 @@ const ItemItem: React.FC<ItemItemProps> = ({
                 {isClaimLoading ? (
                   <ActivityIndicator size="small" color="white" />
                 ) : (
-                  <Text style={styles.claimButtonText}>Unclaim</Text>
+                  <Text style={styles.claimButtonText}>unclaim</Text>
                 )}
               </TouchableOpacity>
             ) : (
               // Display Claimed status by another user
-              <Text style={styles.claimedText}>Claimed</Text>
+              <Text style={colorScheme==='dark'?{...styles.claimedText,color:'#2A7886'}:styles.claimedText}>Claimed</Text>
             )
           ) : (
             // Item is NOT claimed
@@ -126,7 +126,7 @@ const ItemItem: React.FC<ItemItemProps> = ({
               {isClaimLoading ? (
                 <ActivityIndicator size="small" color="white" />
               ) : (
-                <Text style={styles.claimButtonText}>Claim</Text>
+                <Text style={styles.claimButtonText}>claim</Text>
               )}
             </TouchableOpacity>
           )}
@@ -134,9 +134,9 @@ const ItemItem: React.FC<ItemItemProps> = ({
         </ThemedView>
         {item.isClaimed &&
           (userId === item.claimedBy._id ? (
-            <Text style={styles.claimedByMeText}>Claimed by me</Text>
+            <Text style={colorScheme==='dark'?{...styles.claimedByMeText,color:'#2A7886'}:styles.claimedByMeText}>Claimed by me</Text>
           ) : (
-            <ThemedView style={ colorScheme==='dark'? {...styles.listClaimedByContainer,borderTopColor: 'rgb(36, 36, 36)'}: {...styles.listClaimedByContainer, borderTopColor: '#eee'}}>
+            <ThemedView style={ colorScheme==='dark'? {...styles.listClaimedByContainer}: {...styles.listClaimedByContainer,backgroundColor: "rgb(240,240,240)"}}>
               <ThemedView style={styles.avatarContainer}>
                 {item.claimedBy.profilePictureUrl ? (
                   <Image
@@ -179,7 +179,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   listText: {
-    fontSize: 18,
+    fontSize: 15,
     color: "#2A7886",
     maxWidth: '55%', // Constraint text size for better layout
   },
@@ -197,24 +197,24 @@ const styles = StyleSheet.create({
   },
   claimButtonText: {
     color: "white",
-    fontSize: 16,
+    fontSize: 13,
     // fontWeight: 'bold',
   },
   claimedText: {
-    fontSize: 16,
+    fontSize: 13,
     color: 'darkgreen',
     // fontWeight: 'bold',
     marginLeft: 'auto',
   },
   claimedByMeText: {
-    fontSize: 14,
+    fontSize: 13,
     color: 'darkgreen',
     // fontWeight: 'bold',
     marginTop: 5,
   },
   avatarContainer: {
-    width: 30,
-    height: 30,
+    width: 25,
+    height: 25,
     borderRadius: 20,
     marginRight: 5,
     overflow: "hidden",
@@ -229,14 +229,11 @@ const styles = StyleSheet.create({
   listClaimedByContainer: {
     flexDirection: "row",
     alignItems: "center",
-    marginTop: 10,
     paddingTop: 5,
-    borderTopWidth: 1,
-    borderTopColor: '#f0f0f0',
     width: '100%',
   },
   claimedByUsername: {
-    fontSize: 15,
+    fontSize: 13,
     color: 'gray',
   },
   deleteSwipeAction: {

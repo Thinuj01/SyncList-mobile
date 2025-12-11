@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   listText: {
-    fontSize: 18,
+    fontSize: 16,
     color: "#2A7886",
   },
   joinedLabel: {

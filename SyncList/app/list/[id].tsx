@@ -24,6 +24,8 @@ import { Ionicons } from "@expo/vector-icons";
 import MembersModal from "@/components/MembersModel";
 import { jwtDecode } from "jwt-decode";
 import ThemedView from "@/components/ThemedView";
+import { useColorScheme } from "react-native";
+import InsideHeader from "@/components/InsideHeader";
 
 type itemProp = {
   _id: string;
@@ -40,7 +42,7 @@ type memberProps = {
   _id: string;
   username: string;
   profilePictureUrl: string;
-}
+};
 
 type ShoppingList = {
   _id: string;
@@ -68,13 +70,14 @@ const ListDetailScreen = () => {
   const [isQRModalVisible, setIsQRModalVisible] = useState(false);
   const [memberModelVisible, setMemberModelVisible] = useState(false);
   const [userId, setUserId] = useState<string | null>(null);
+  const colorScheme = useColorScheme();
 
   const fetchItems = async () => {
     setIsListLoading(true);
     try {
       const response = await axios.get(`${API_URL}/api/item/${id}`);
       setItems(response.data);
-    } catch (err) {   
+    } catch (err) {
       if (axios.isAxiosError(err) && err.response?.status === 403) {
         logOut();
         return;
@@ -108,7 +111,6 @@ const ListDetailScreen = () => {
           setIsAddItemModelOpen(false);
         }
       } catch (err: unknown) {
-        
         if (axios.isAxiosError(err) && err.response?.status === 403) {
           logOut();
           return;
@@ -138,7 +140,7 @@ const ListDetailScreen = () => {
       if (axios.isAxiosError(err) && err.response?.status === 403) {
         logOut();
         return;
-      } 
+      }
       if (axios.isAxiosError(err)) {
         alert(err.response?.data?.message || "Something went wrong");
       } else if (err instanceof Error) {
@@ -238,11 +240,12 @@ const ListDetailScreen = () => {
         isVisible={isQRModalVisible}
         onClose={() => setIsQRModalVisible(false)}
       />
-      <HeaderSection />
+      {/* <HeaderSection /> */}
+      <InsideHeader />
       <ThemedView style={styles.header}>
         {!showLoading && (
           <>
-            <Text style={styles.listName}>{items && items.listName}</Text>
+            <Text style={colorScheme==='dark'?{...styles.listName,color:'#FAFAFA'}:{...styles.listName}}>{items && items.listName}</Text>
             <ThemedView style={styles.headerIcons}>
               <Pressable onPress={() => setIsQRModalVisible(true)}>
                 <Ionicons
@@ -261,11 +264,7 @@ const ListDetailScreen = () => {
                 />
               </Pressable>
               <Pressable onPress={() => setMemberModelVisible(true)}>
-                <Ionicons
-                  name="people-outline"
-                  size={24}
-                  color="#2A7886"
-                />
+                <Ionicons name="people-outline" size={24} color="#2A7886" />
               </Pressable>
             </ThemedView>
           </>
@@ -284,14 +283,16 @@ const ListDetailScreen = () => {
             setSelectedDeleteItemId={setSelectedDeleteItemId}
             itemClaiming={itemClaiming}
           />
-          <SyncListButton
-            onClick={() => setIsAddItemModelOpen(true)}
-            type="primary"
-            disabled={false}
-            style={styles.addItemButton}
-          >
-            Add a Item
-          </SyncListButton>
+          <ThemedView style={styles.addItemButtonContainer}>
+            <SyncListButton
+              onClick={() => setIsAddItemModelOpen(true)}
+              type="primary"
+              disabled={false}
+              style={styles.addItemButton}
+            >
+              Add a Item
+            </SyncListButton>
+          </ThemedView>
         </>
       )}
 
@@ -377,6 +378,9 @@ const styles = StyleSheet.create({
   refreshIcon: {
     position: "absolute",
     right: 30,
+  },
+  addItemButtonContainer:{
+    paddingVertical: 10,
   },
   addItemButton: {
     width: "90%",

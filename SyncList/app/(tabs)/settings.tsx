@@ -24,6 +24,7 @@ type userProps = {
   _id: string;
   username: string;
   email: string;
+  profilePictureUrl?: string;
 };
 
 export default function SettingsScreen() {
@@ -151,9 +152,9 @@ export default function SettingsScreen() {
               onPress={pickImage}
               style={styles.profileImageContainer}
             >
-              {profileImage ? (
+              {user?.profilePictureUrl ? (
                 <Image
-                  source={{ uri: profileImage }}
+                  source={{ uri: user?.profilePictureUrl }}
                   style={styles.profileImage}
                 />
               ) : (
